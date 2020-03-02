@@ -1,14 +1,18 @@
 import { LightningElement, api } from 'lwc';
 import { reduceErrors, getErrorDetails } from 'c/ldsUtils';
 
-export default class ErrorPanel extends LightningElement {
+export default class ErrorTaost extends LightningElement {
     /** Generic / user-friendly message */
-    @api friendlyMessage = 'データの取得に失敗しました。';
+    @api friendlyMessage = 'データの保存に失敗しました。';
 
     viewDetails = false;
 
     /** Single or array of LDS errors */
     @api errors;
+
+    get isOpen() {
+        return this.errors;
+    }
 
     get errorMessages() {
         return reduceErrors(this.errors);
@@ -20,5 +24,9 @@ export default class ErrorPanel extends LightningElement {
 
     handleCheckboxChange(event) {
         this.viewDetails = event.target.checked;
+    }
+
+    close() {
+        this.errors = null;
     }
 }

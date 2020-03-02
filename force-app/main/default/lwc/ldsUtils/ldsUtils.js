@@ -35,3 +35,28 @@ export function reduceErrors(errors) {
             .filter(message => !!message)
     );
 }
+
+/**
+ * エラーオブジェクトをJSON文字列に変換する。
+ * https://stackoverflow.com/a/53624454
+ * 
+ * @param {FetchResponse|FetchResponse[]} errors
+ * @return {String} JSON String
+ */
+export function getErrorDetails(errors) {
+    function jsonFriendlyErrorReplacer(key, value) {
+        if (value instanceof Error) {
+            return {
+                // Pull all enumerable properties, supporting properties on custom Errors
+                ...value,
+                // Explicitly pull Error's non-enumerable properties
+                name: value.name,
+                message: value.message,
+                stack: value.stack,
+            }
+        }
+        return value
+    }
+
+    return JSON.stringify(errors, jsonFriendlyErrorReplacer, 2);
+}
